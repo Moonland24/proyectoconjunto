@@ -12,7 +12,7 @@ public class GestionadordeArchivos {
         System.out.println("2. Lectura de fichero");
         System.out.println("3. Conversión a (csv, json, xml)");
         System.out.println("4. Salir");
-         System.out.println("Ruta de la carpeta seleccionada: ");
+        System.out.println("Ruta de la carpeta seleccionada: ");
         System.out.println("Fichero seleccionado: " );
         System.out.print("Seleccione una opción: ");
 
@@ -21,13 +21,13 @@ public class GestionadordeArchivos {
 
         switch (opcion) {
             case 1:
-                seleccionarCarpeta;
+                seleccionarCarpeta(scanner);
                 break;
             case 2:
-                leerFichero;
+                //leerFichero();
                 break;
             case 3:
-                convertirFichero;
+                //convertirFichero();
                 break;
             case 4:
                 salir = true;
@@ -39,12 +39,13 @@ public class GestionadordeArchivos {
         }
         scanner.close();
     }
-    public static String selecionarCarpeta (Scanner sc){
+
+    public static String seleccionarCarpeta (Scanner scanner){
         System.out.println("Introduce la ruta de tu carpeta porfis:");
         String rutaCarpeta = scanner.nextLine();
         File carpeta = new File(rutaCarpeta);
         
-        if (carpeta != null && carpeta.isDirectory()){
+        if (carpeta.exists() && carpeta.isDirectory()){
             System.out.println("Bien, has escogido correctamente la carpeta");
             return rutaCarpeta;      
         }else{
