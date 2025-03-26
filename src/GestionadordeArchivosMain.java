@@ -22,7 +22,7 @@ public class GestionadordeArchivosMain {
                     gestor.seleccionarCarpeta(scanner);
                     break;
                 case 2:
-                    //gestor.leerFichero(scanner);
+                    gestor.seleccionarFichero(scanner);
                     break;
                 case 3:
                     //gestor.convertirFichero(scanner);
