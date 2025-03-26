@@ -7,7 +7,7 @@ public class GestorArchivos {
     private String ficheroSeleccionado;
     private List<String> xmlDatos;
     private List<JSONObject> jsonDatos;
-    private Lista<String[]> csvDatos;
+    private List<String[]> csvDatos;
 
     public GestorArchivos() {
         this.carpetaSeleccionada = null;
