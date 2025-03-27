@@ -6,7 +6,10 @@ import java.util.Scanner;
 
 import javax.swing.border.StrokeBorder;
 
-public class GestorArchivos {
+
+
+
+public class GestorArchivos<JSONArray> {
     private String carpetaSeleccionada;
     private String ficheroSeleccionado;
     private List<Registro> datosOriginales = new ArrayList<>();
@@ -129,14 +132,69 @@ public class GestorArchivos {
     }
 
     // Parsear JSON
-    private void recogerJSON(String fichero) {
-
-    }
+    
+    private void recogerJSON(String rutaFichero) {
+        datosOriginales.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader(rutaFichero))) {
+            StringBuilder contenido = new StringBuilder();
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                contenido.append(linea);
+            }
+            String jsonStr = contenido.toString().trim();
+            if (jsonStr.startsWith("[") && jsonStr.endsWith("]")) {
+                jsonStr = jsonStr.substring(1, jsonStr.length() - 1);
+            }
+            String[] objetos = jsonStr.split("\\},\\s*\\{");
+                for (String obj : objetos) {
+                    if (!obj.startsWith("{")) obj = "{" + obj;
+                    if (!obj.endsWith("}")) obj = obj + "}";
+                    Registro registro = new Registro();
+                    String[] pares = obj.split(",");
+        
+                    for (String par : pares) {
+                        String[] keyValue = par.split(":");
+                        if (keyValue.length == 2) {
+                            String key = keyValue[0].replaceAll("[\"{}]", "").trim();
+                            String value = keyValue[1].replaceAll("[\"{}]", "").trim();
+                            registro.agregarCampo(key, value);
+                        }
+                    }
+                    datosOriginales.add(registro);
+                }
+                System.out.println("JSON procesado. Total registros: " + datosOriginales.size());
+            } catch (IOException e) {
+                System.err.println("Error al leer el archivo JSON: " + e.getMessage());
+            }
+        }
 
     // Parsear CSV
-    private void recogerCSV(String fichero) {
+    
+    private void recogerCSV(String rutaFichero) {
+        datosOriginales.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader(rutaFichero))) {
+            String linea; 
+            while ((linea = reader.readLine()) != null) {
+                String[] campos = linea.split(",");
+                    if (campos.length ==5 ){
+                        Registro registro = new Registro();
+                        registro.agregarCampo("Marca : ", campos[0].trim());
+                        registro.agregarCampo("Modelo : ", campos[1].trim());
+                        registro.agregarCampo("Año : ", campos[2].trim());
+                        registro.agregarCampo("COlor : ", campos[3].trim());
+                        registro.agregarCampo("Precio : ", campos[4].trim());
+                        datosOriginales.add(registro);
+                         }
+                    }
+                    System.out.println("CSV procesado. Total de registros : "+ datosOriginales.size());    
+            }
+            catch (IOException e){
+                System.err.println("Error al leer el archivo CVS: "+ e.getMessage());
+            }
+        }
 
-    }
+
+    
 
     // Convertir a XML
     // Covertir a JSON
