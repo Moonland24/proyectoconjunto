@@ -4,17 +4,58 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import javax.swing.border.StrokeBorder;
+
 
 public class GestorArchivos<JSONArray> {
     private String carpetaSeleccionada;
     private String ficheroSeleccionado;
     private List<Registro> datosOriginales = new ArrayList<>();
 
+
     public GestorArchivos() {
         this.carpetaSeleccionada = null;
         this.ficheroSeleccionado = null;
+        
     }
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+    private void mostrarContenidoCarpeta() {
+        File carpeta = new File(carpetaSeleccionada);
+        File[] archivos = carpeta.listFiles();
+        System.out.println("Contenido de la carpeta:");
+        for (File archivo : archivos) {
+            System.out.println("  " + archivo.getName());
+            System.out.println("\n");
+        }
+    }
+    private void mostrarInformacionActual(){
+        System.out.println("\nInformación actual:");
+        if (carpetaSeleccionada != null) {
+            System.out.println("Carpeta seleccionada: " + carpetaSeleccionada);
+            mostrarContenidoCarpeta();
+        } else {
+            System.out.println("No hay carpeta seleccionada.");
+        }
+        if (ficheroSeleccionado != null) {
+            System.out.println("Fichero seleccionado: " + ficheroSeleccionado);
+        } else {
+            System.out.println("No hay fichero seleccionado.");
+        }
+    }
+    public void mostrarInformacionActual(Scanner scanner) {
+        mostrarInformacionActual();
+        System.out.println("\nPresione Enter para continuar...");
+        scanner.nextLine();
+    }  
+    
+    public void salir() {
+        System.out.println("Saliendo del programa...");
+    }
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+    
 
     public boolean seleccionarCarpeta(Scanner scanner) {
         System.out.println("Introduce la ruta de tu carpeta porfis:");
@@ -23,12 +64,14 @@ public class GestorArchivos<JSONArray> {
 
         if (carpeta.exists() && carpeta.isDirectory()) {
             this.carpetaSeleccionada = rutaCarpeta;
-            System.out.println("Bien, has escogido correctamente la carpeta " + carpeta.getName());
+            System.out.println("\nBien, has escogido correctamente la carpeta " + carpeta.getName() );
             File[] archivosEnCarpeta = carpeta.listFiles();
             System.out.println("El contenido de la carpeta es: ");
             for (File file : archivosEnCarpeta) {
                 System.out.println(file.getName());
+               
             }
+ System.out.println();
 
             return true;
         } else {
@@ -289,3 +332,5 @@ public class GestorArchivos<JSONArray> {
     }
 
 }
+
+

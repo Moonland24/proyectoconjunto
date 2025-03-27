@@ -34,7 +34,8 @@ public class GestionadordeArchivosMain {
                 default:
                     System.out.println("Opción no válida. Intente de nuevo.");
             }
-            //gestor.mostrarInformacionActual();
+          
+            
         }
         scanner.close();
     }
