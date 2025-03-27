@@ -25,7 +25,7 @@ public class GestionadordeArchivosMain {
                     gestor.seleccionarFichero(scanner);
                     break;
                 case 3:
-                    //gestor.convertirFichero(scanner);
+                    gestor.convertirFichero(scanner);
                     break;
                 case 4:
                     salir = true;

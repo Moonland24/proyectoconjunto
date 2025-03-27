@@ -6,9 +6,6 @@ import java.util.Scanner;
 
 import javax.swing.border.StrokeBorder;
 
-
-
-
 public class GestorArchivos<JSONArray> {
     private String carpetaSeleccionada;
     private String ficheroSeleccionado;
@@ -169,7 +166,7 @@ public class GestorArchivos<JSONArray> {
         }
 
     // Parsear CSV
-    
+
     private void recogerCSV(String rutaFichero) {
         datosOriginales.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(rutaFichero))) {
@@ -192,11 +189,103 @@ public class GestorArchivos<JSONArray> {
                 System.err.println("Error al leer el archivo CVS: "+ e.getMessage());
             }
         }
+// FUncion converti fichero 
 
-
+    public void convertirFichero(Scanner scanner) {
+            if (ficheroSeleccionado == null || datosOriginales.isEmpty()) {
+                System.out.println("Primero selecciona y procesa un fichero.");
+                return;
+            }
+        
+            System.out.println("\nMENÚ DE CONVERSIÓN");
+            System.out.println("1. CSV");
+            System.out.println("2. JSON");
+            System.out.println("3. XML");
+            System.out.print("Seleccione un formato de salida: ");
+            int opcion = scanner.nextInt();
+                scanner.nextLine(); 
+        
+            System.out.print("Ingrese el nombre del fichero de salida (sin extensión): ");
+            String nombreSalida = scanner.nextLine();
     
+            switch (opcion) {
+                case 1:
+                    convertirACSV(nombreSalida);
+                    break;
+                case 2:
+                    convertirAJSON(nombreSalida);
+                    break;
+                case 3:
+                    convertirAXML(nombreSalida);
+                    break;
+                default:
+                    System.out.println("Opción no válida");
+            }
+        }
 
     // Convertir a XML
+
+    private void convertirAXML(String nombreSalida) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(carpetaSeleccionada + File.separator + nombreSalida + ".xml"))) {
+            writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            writer.println("<coches>");
+            for (Registro registro : datosOriginales) {
+                writer.println("  <coche>");
+                writer.println("    <marca>" + registro.obtenerCampo("Marca") + "</marca>");
+                writer.println("    <modelo>" + registro.obtenerCampo("Modelo") + "</modelo>");
+                writer.println("    <año>" + registro.obtenerCampo("Año") + "</año>");
+                writer.println("    <color>" + registro.obtenerCampo("Color") + "</color>");
+                writer.println("    <precio>" + registro.obtenerCampo("Precio") + "</precio>");
+                writer.println("  </coche>");
+            }
+            writer.println("</coches>");
+            System.out.println("Archivo XML generado: " + nombreSalida + ".xml");
+        } catch (IOException e) {
+            System.err.println("Error al generar XML: " + e.getMessage());
+        }
+    }
     // Covertir a JSON
+
+    private void convertirAJSON(String nombreSalida) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(carpetaSeleccionada + File.separator + nombreSalida + ".json"))) {
+            writer.println("[");
+            for (int i = 0; i < datosOriginales.size(); i++) {
+                Registro registro = datosOriginales.get(i);
+                writer.println("  {");
+                writer.println("    \"Marca\": \"" + registro.obtenerCampo("Marca") + "\",");
+                writer.println("    \"Modelo\": \"" + registro.obtenerCampo("Modelo") + "\",");
+                writer.println("    \"Año\": " + registro.obtenerCampo("Año") + ",");
+                writer.println("    \"Color\": \"" + registro.obtenerCampo("Color") + "\",");
+                writer.println("    \"Precio\": " + registro.obtenerCampo("Precio"));
+                writer.print("  }");
+                if (i < datosOriginales.size() - 1) {
+                    writer.println(",");
+                } else {
+                    writer.println();
+                }
+            }
+            writer.println("]");
+            System.out.println("Archivo JSON generado: " + nombreSalida + ".json");
+        } catch (IOException e) {
+            System.err.println("Error al generar JSON: " + e.getMessage());
+        }
+    }
+
     // Convertir a CSV
+
+    private void convertirACSV(String nombreSalida) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(carpetaSeleccionada + File.separator + nombreSalida + ".csv"))) {
+            for (Registro registro : datosOriginales) {
+                writer.println(registro.obtenerCampo("Marca") + "," +
+                               registro.obtenerCampo("Modelo") + "," +
+                               registro.obtenerCampo("Año") + "," +
+                               registro.obtenerCampo("Color") + "," +
+                               registro.obtenerCampo("Precio"));
+            }
+            System.out.println("Archivo CSV generado: " + nombreSalida + ".csv");
+        } catch (IOException e) {
+            System.err.println("Error al generar CSV: " + e.getMessage());
+        }
+    }
+
 }
