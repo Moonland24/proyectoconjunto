@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import javax.swing.border.StrokeBorder;
-
 public class GestorArchivos {
     private String carpetaSeleccionada;
     private String ficheroSeleccionado;
